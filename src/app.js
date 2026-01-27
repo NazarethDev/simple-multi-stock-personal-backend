@@ -4,6 +4,7 @@ import { connectDB } from "./config/database.js";
 import productRoutes from "./routes/productRoutes.js";
 import cors from "cors";
 import corsOptions from "./config/corsConfig.js";
+import { StatusCodes } from "http-status-codes";
 
 dotenv.config();
 
@@ -17,5 +18,9 @@ app.options("*", cors(corsOptions));
 connectDB();
 
 app.use("/products", productRoutes);
+
+app.get("/", (req, res) => {
+    res.status(StatusCodes.OK).json(({status: "API online 🚀"}))
+})
 
 export default app;

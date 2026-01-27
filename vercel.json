@@ -2,7 +2,7 @@
     "version": 2,
     "builds": [
         {
-            "src": "src/app.js",
+            "src": "api/index.js",
             "use": "@vercel/node",
             "config": {
                 "runtime": "nodejs20.x"
@@ -12,15 +12,7 @@
     "routes": [
         {
             "src": "/(.*)",
-            "methods": [
-                "GET",
-                "POST",
-                "PUT",
-                "PATCH",
-                "DELETE",
-                "OPTIONS"
-            ],
-            "dest": "src/app.js"
+            "dest": "/api/index.js"
         }
     ]
 }
