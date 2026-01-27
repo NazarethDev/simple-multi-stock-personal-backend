@@ -7,11 +7,15 @@ const allowedOrigins = process.env.CORS_ORIGINS?.split(",") || [];
 
 const corsOptions = {
     origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error("CORS bloqueado para esta origem"));
+        if (!origin){
+            return callback(null, true);
         }
+
+        if (allowedOrigins.includes(origin)){
+            return callback(null, true);
+        }
+
+        return callback(null, false);
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
