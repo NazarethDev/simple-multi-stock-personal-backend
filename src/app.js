@@ -11,9 +11,10 @@ const app = express();
 
 app.use(express.json());
 
-connectDB();
-
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
+
+connectDB();
 
 app.use("/products", productRoutes);
 
