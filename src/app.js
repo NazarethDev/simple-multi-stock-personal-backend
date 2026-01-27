@@ -18,6 +18,12 @@ app.use("/products", productRoutes);
 
 app.get("/", (req, res) => {
     res.status(StatusCodes.OK).json(({ status: "API online 🚀" }))
-})
+});
+
+// app.js - Adicione ao final
+app.use((req, res) => {
+    console.log(`Rota não encontrada: ${req.method} ${req.url}`);
+    res.status(404).json({ message: `Rota ${req.url} não encontrada no Express` });
+});
 
 export default app;
