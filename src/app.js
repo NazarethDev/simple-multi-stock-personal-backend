@@ -13,12 +13,12 @@ const app = express();
 app.use(express.json());
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+app.options("(.*)", cors(corsOptions));
 
 app.use("/products", productRoutes);
 
 app.get("/", (req, res) => {
-    res.status(StatusCodes.OK).json(({status: "API online 🚀"}))
+    res.status(StatusCodes.OK).json(({ status: "API online 🚀" }))
 })
 
 export default app;
