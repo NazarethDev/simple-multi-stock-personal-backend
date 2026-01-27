@@ -15,8 +15,6 @@ app.use(express.json());
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 
-connectDB();
-
 app.use("/products", productRoutes);
 
 app.get("/", (req, res) => {
