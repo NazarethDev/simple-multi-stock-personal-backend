@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-let cached = global.mongoose;
+let cached = global.mongoose || { conn: null, promise: null };
 
 export const connectDB = async () => {
     if (cached.conn) {
