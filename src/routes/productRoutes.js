@@ -13,7 +13,7 @@ router.patch("/update-cost-and-name/:id", updateNameOrProductCostController);
 
 router.get("/expiring-soon", getExpireSoonProducts);
 
-router.get("/ean/:eanCode/", findByProductEanCode);
+router.get("/ean/:eanCode", findByProductEanCode);
 
 router.get("/statistics/expired-products-by-store", getExpiredProductsByStoreController);
 
