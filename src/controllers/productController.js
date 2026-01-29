@@ -68,6 +68,7 @@ export async function getExpireSoonProducts(req, res) {
 export async function findByProductEanCode(req, res) {
     try {
         const { eanCode } = req.params;
+        console.log("Buscando código de barras: ", eanCode);
 
         const products = await findByProductEanCodeService(eanCode);
 
