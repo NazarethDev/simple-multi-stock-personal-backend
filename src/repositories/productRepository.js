@@ -30,11 +30,11 @@ export async function findExpiringSoonProducts({
     };
 };
 
-export async function findProductByEanCode(eanCode) {
+export async function findProductByEanCode(eanCode, referenceDate) {
     return await Product
         .find({
             eanCode,
-            expiresAt: { $gt: new Date() }
+            expiresAt: { $gte: referenceDate }
         })
         .sort({ expiresAt: 1 });
 }

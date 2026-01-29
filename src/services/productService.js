@@ -160,7 +160,13 @@ export async function expireSoonProductsService({ page = 1, limit = 15, days = 7
 };
 
 export async function findByProductEanCodeService(eanCode) {
-    const products = await findProductByEanCode(eanCode);
+
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0)
+
+    const cleanEanCode = String(eanCode).trim();
+
+    const products = await findProductByEanCode(cleanEanCode, today);
 
     if (products.length === 0) {
         throw new Error("Ean code not found")
