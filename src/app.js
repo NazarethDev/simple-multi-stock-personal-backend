@@ -1,29 +1,20 @@
+// src/app.js
 import express from "express";
-import dotenv from "dotenv";
-import { connectDB } from "./config/database.js";
-import productRoutes from "./routes/productRoutes.js";
 import cors from "cors";
+import productRoutes from "./routes/productRoutes.js";
 import corsOptions from "./config/corsConfig.js";
-import { StatusCodes } from "http-status-codes";
-
-dotenv.config();
 
 const app = express();
 
+app.use(cors(corsOptions));
 app.use(express.json());
 
-app.use(cors(corsOptions));
-
+// Rotas específicas primeiro
 app.use("/products", productRoutes);
-app.use("/", productRoutes);
 
-app.get("/", (req, res) => {
-    res.status(StatusCodes.OK).json(({ status: "API online 🚀" }))
-});
-
-app.use((req, res) => {
-    console.log(`Rota não encontrada: ${req.method} ${req.url}`);
-    res.status(404).json({ message: `Rota ${req.url} não encontrada no Express` });
+// Rota de checagem de saúde
+app.get("/api/health", (req, res) => {
+    res.status(200).json({ status: "API online 🚀" });
 });
 
 export default app;
