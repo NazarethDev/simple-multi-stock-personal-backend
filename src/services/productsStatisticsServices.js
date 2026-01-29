@@ -12,10 +12,16 @@ export async function expiredProductsByStoreService(months) {
 
     const stats = await getExpiredProductsByStoreRpository(Number(months));
 
-    return stats.map(item => ({
-        store: item._id,
-        totalExpiredProducts: item.totalExpiredProducts
-    }));
+    const totalLostedProducts = stats.reduce((acc, item) => acc + item.totalExpiredProducts, 0);
+
+    return {
+        totalLosted: totalLostedProducts, 
+        byStore: stats.map(item => ({
+            store: item._id,
+            totalExpiredProducts: item.totalExpiredProducts
+        }))
+    };
+
 };
 
 export async function getExpiresCostsStatisticsService(months) {
@@ -29,11 +35,16 @@ export async function getExpiresCostsStatisticsService(months) {
 
     const data = await getExpiredCostByStoreRepository(parsedMonths);
 
-    const response = {};
+    let totalLostedCost = 0;
+    const byStore = {};
 
     data.forEach(item => {
-        response[item._id] = item.total;
+        byStore[item._id] = Number(item.total.toFixed(2));
+        totalLostedCost += item.total
     });
 
-    return response;
+    return {
+        totalLosted: Number(totalLostedCost.toFixed(2)),
+        byStore: byStore
+    };
 }
