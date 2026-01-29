@@ -13,8 +13,9 @@ app.use(express.json());
 app.use("/products", productRoutes);
 
 // Rota de checagem de saúde
-app.get("/api/health", (req, res) => {
-    res.status(200).json({ status: "API online 🚀" });
+// Rota base para teste direto
+app.get("/", (req, res) => {
+    res.json({ status: "API online", timestamp: new Date() });
 });
 
 export default app;
