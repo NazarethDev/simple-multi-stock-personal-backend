@@ -2,7 +2,7 @@ import { STORE_KEYS } from "../models/storeMap.js";
 import Product from "../models/productSchema.js";
 import { StatusCodes } from "http-status-codes";
 import normalizeDate from "../utils/normalizeDate.js";
-import { findExpiringSoonProducts, findProductByEanCode, updateProductNameAndCostRepository } from "../repositories/productRepository.js"
+import { findExpiringSoonProducts, findProductByEanCode, updateProductNameAndCostRepository, findExpiredProducts } from "../repositories/productRepository.js"
 
 
 function getInitialQuantity() {
@@ -176,3 +176,38 @@ export async function findByProductEanCodeService(eanCode) {
 
     return data;
 }
+
+export async function expiredProductsService({ page = 1, limit = 15, days = 30 }) {
+    // Define o limite superior como o início do dia de hoje (00:00:00)
+    // Assim, o operador $lt pegará tudo que venceu até 23:59:59 de ontem.
+    const endDate = new Date();
+    endDate.setUTCHours(0, 0, 0, 0);
+
+    // O startDate recua X dias a partir do início de hoje
+    const startDate = new Date(endDate);
+    startDate.setUTCDate(endDate.getUTCDate() - days);
+
+    const { products, total } = await findExpiredProducts({
+        startDate,
+        endDate,
+        page,
+        limit
+    });
+
+    const data = products.map(product => product.toObject());
+
+    return {
+        data,
+        filter: {
+            expiredInLastDays: days,
+            since: startDate,
+            untilYesterday: new Date(endDate.getTime() - 1)
+        },
+        pagination: {
+            totalItems: total,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page,
+            itemsPerPage: limit
+        }
+    };
+};

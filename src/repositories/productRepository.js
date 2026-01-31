@@ -46,3 +46,30 @@ export async function updateProductNameAndCostRepository(productId, updateData) 
         { new: true, runValidators: true }
     );
 }
+
+export async function findExpiredProducts({
+    startDate,
+    endDate,
+    page,
+    limit
+}) {
+    const skip = (page - 1) * limit;
+
+    const query = {
+        expiresAt: {
+            $lt: endDate, 
+            $gte: startDate 
+        }
+    };
+
+    const [products, total] = await Promise.all([
+        Product.find(query)
+            .sort({ expiresAt: -1 })
+            .skip(skip)
+            .limit(limit),
+
+        Product.countDocuments(query)
+    ]);
+
+    return { products, total };
+}

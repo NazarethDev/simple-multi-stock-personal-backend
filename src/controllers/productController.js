@@ -1,4 +1,4 @@
-import { createProductService, updateProductQuantityService, expireSoonProductsService, findByProductEanCodeService, updateProductCostAndNameService } from "../services/productService.js";
+import { createProductService, updateProductQuantityService, expireSoonProductsService, findByProductEanCodeService, updateProductCostAndNameService, expiredProductsService } from "../services/productService.js";
 import { StatusCodes } from "http-status-codes";
 
 export async function createProduct(req, res) {
@@ -97,4 +97,24 @@ export async function updateNameOrProductCostController(req, res) {
             .status(error.status || StatusCodes.BAD_REQUEST)
             .json({ error: error.message });
     }
+}
+
+export async function findExpiredProducts(req, res) {
+    try {
+        const {
+            page = req.page,
+            limit = req.limit,
+            days = req.days
+        } = req.query;
+        const result = await expiredProductsService({
+            page: Number(page),
+            limit: Number(limit),
+            days: Number(days)
+        });
+        return res.status(StatusCodes.OK).json(result);
+    } catch (error) {
+        return res
+            .status(StatusCodes.BAD_REQUEST)
+            .json({ error: error.message })
+    };
 }

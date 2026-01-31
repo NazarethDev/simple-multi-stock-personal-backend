@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { createProduct, updateProductQuantity, getExpireSoonProducts, findByProductEanCode, updateNameOrProductCostController } from "../controllers/productController.js";
+import { createProduct, updateProductQuantity, getExpireSoonProducts, findByProductEanCode, updateNameOrProductCostController, findExpiredProducts } from "../controllers/productController.js";
 import { getExpiredProductsByStoreController, getExpiredCostStatisticsController } from "../controllers/productStatistics.Controller.js";
-import semDescanso  from "../controllers/performerController.js";
+import semDescanso from "../controllers/performerController.js";
 
 const router = Router();
 
@@ -14,6 +14,8 @@ router.patch("/update-cost-and-name/:id", updateNameOrProductCostController);
 router.get("/expiring-soon", getExpireSoonProducts);
 
 router.get("/ean/:eanCode", findByProductEanCode);
+
+router.get("/expired-products", findExpiredProducts);
 
 router.get("/statistics/expired-products-by-store", getExpiredProductsByStoreController);
 
