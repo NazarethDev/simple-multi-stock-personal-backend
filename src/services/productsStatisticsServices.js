@@ -1,7 +1,10 @@
 import { StatusCodes } from "http-status-codes";
-import { getExpiredProductsByStoreRpository, getExpiredCostByStoreRepository } from "../repositories/productStatistcsRepository.js";
+import { getExpiredProductsByStoreRepository, getExpiredCostByStoreRepository } from "../repositories/productStatistcsRepository.js";
 
 export async function expiredProductsByStoreService(months) {
+
+    const searchMonths = months ? Number(months) : 1
+
     const allowedMonths = [1, 2, 3];
 
     if (!allowedMonths.includes(Number(months))) {
@@ -10,12 +13,12 @@ export async function expiredProductsByStoreService(months) {
         throw error;
     };
 
-    const stats = await getExpiredProductsByStoreRpository(Number(months));
+    const stats = await getExpiredProductsByStoreRepository(Number(months));
 
     const totalLostedProducts = stats.reduce((acc, item) => acc + item.totalExpiredProducts, 0);
 
     return {
-        totalLosted: totalLostedProducts, 
+        totalLosted: totalLostedProducts,
         byStore: stats.map(item => ({
             store: item._id,
             totalExpiredProducts: item.totalExpiredProducts
@@ -25,9 +28,9 @@ export async function expiredProductsByStoreService(months) {
 };
 
 export async function getExpiresCostsStatisticsService(months) {
-    const parsedMonths = Number(months);
+    const parsedMonths = months ? Number(months) : 3
 
-    if (![1, 2, 3].includes(parsedMonths)) {
+    if (isNaN(parsedMonths) || ![1, 2, 3].includes(parsedMonths)) {
         const error = new Error("Months must be 1, 2 or 3");
         error.status = StatusCodes.BAD_REQUEST;
         throw error;

@@ -1,6 +1,6 @@
 import Product from "../models/productSchema.js";
 
-export async function getExpiredProductsByStoreRpository(months) {
+export async function getExpiredProductsByStoreRepository(months) {
 
     const endDate = new Date();
     const startDate = new Date();
@@ -63,7 +63,7 @@ export async function getExpiredCostByStoreRepository(months) {
             }
         },
 
-        { $unwind: "quantityArray" },
+        { $unwind: "$quantityArray" },
 
         {
             $project: {
@@ -83,4 +83,4 @@ export async function getExpiredCostByStoreRepository(months) {
 
     return result
 
-}
+} 

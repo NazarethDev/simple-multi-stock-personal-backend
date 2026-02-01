@@ -22,7 +22,7 @@ export async function getExpiredProductsByStoreController(req, res) {
 
 export async function getExpiredCostStatisticsController(req, res) {
     try {
-        const { months } = req.params;
+        const { months } = req.query;
         const result = await getExpiresCostsStatisticsService(months);
 
         return res

@@ -19,7 +19,7 @@ router.get("/expired-products", findExpiredProducts);
 
 router.get("/statistics/expired-products-by-store", getExpiredProductsByStoreController);
 
-router.get("/statistics/expired-products-costs-by-store/:months", getExpiredCostStatisticsController);
+router.get("/statistics/expired-products-costs-by-store", getExpiredCostStatisticsController);
 
 router.route("/semDescanso").get(semDescanso).head(semDescanso)
 
