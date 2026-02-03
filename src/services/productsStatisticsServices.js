@@ -1,5 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import { getExpiredProductsByStoreRepository, getExpiredCostByStoreRepository } from "../repositories/productStatistcsRepository.js";
+import { getExpiredProductsByStoreRepository, getExpiredCostByStoreRepository, getTopExpiredProductsRepository } from "../repositories/productStatistcsRepository.js";
 
 export async function expiredProductsByStoreService(months) {
     const parsedMonths = months ? Number(months) : 1;
@@ -23,7 +23,7 @@ export async function expiredProductsByStoreService(months) {
 
     return {
         totalLosted: totalLostedProducts,
-        byStore: byStore 
+        byStore: byStore
     };
 }
 
@@ -50,4 +50,24 @@ export async function getExpiresCostsStatisticsService(months) {
         totalLosted: Number(totalLostedCost.toFixed(2)),
         byStore: byStore
     };
+}
+
+export async function getTopExpiredProductsService(months) {
+    const parsedMonths = months ? Number(months) : 1;
+    const allowedMonths = [1, 2, 3];
+
+    if (!allowedMonths.includes(parsedMonths)) {
+        const error = new Error("Invalid search period.");
+        error.status = StatusCodes.BAD_REQUEST;
+        throw error;
+    }
+
+    const topProducts = await getTopExpiredProductsRepository(parsedMonths);
+
+    return topProducts.map(p => ({
+        id: p._id,
+        name: p.name,
+        ean: p.eanCode,
+        quantity: p.totalQuantity
+    }));
 }

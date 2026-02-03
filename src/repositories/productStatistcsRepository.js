@@ -72,6 +72,37 @@ export async function getExpiredCostByStoreRepository(months) {
         }
     ]);
 
-    return result
+    return result;
+};
 
-} 
+export async function getTopExpiredProductsRepository(months) {
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - (months * 30));
+
+    return Product.aggregate([
+        {
+            $match: {
+                expiresAt: { $gte: startDate, $lt: endDate }
+            }
+        },
+        {
+            $project: {
+                name: 1,
+                eanCode: 1,
+                totalQuantity: {
+                    $reduce: {
+                        input: { $objectToArray: "$quantity" },
+                        initialValue: 0,
+                        in: { $add: ["$$value", "$$this.v"] }
+                    }
+                }
+            }
+        },
+        {
+            $match: { totalQuantity: { $gt: 0 } }
+        },
+        { $sort: { totalQuantity: -1 } },
+        { $limit: 10 }
+    ]);
+}

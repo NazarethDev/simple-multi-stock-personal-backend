@@ -10,8 +10,7 @@ const app = express();
 app.use(cors(corsOptions));
 app.use(express.json());
 
-connectDB();
-
+//connectDB();
 
 app.use((req, res, next) => {
     console.log(`[DEBUG] Method: ${req.method} | URL: ${req.url} | Path: ${req.path}`);
