@@ -1,7 +1,6 @@
 import Product from "../models/productSchema.js";
 
 export async function getExpiredProductsByStoreRepository(months) {
-
     const endDate = new Date();
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - (months * 30));
@@ -9,10 +8,7 @@ export async function getExpiredProductsByStoreRepository(months) {
     return Product.aggregate([
         {
             $match: {
-                expiresAt: {
-                    $gte: startDate,
-                    $lt: endDate
-                }
+                expiresAt: { $gte: startDate, $lt: endDate }
             }
         },
         {
@@ -20,23 +16,18 @@ export async function getExpiredProductsByStoreRepository(months) {
                 quantityArray: { $objectToArray: "$quantity" }
             }
         },
+        { $unwind: "$quantityArray" },
         {
-            $unwind: "$quantityArray"
-        },
-        {
-            $match: {
-                "quantityArray.v": { $gt: 0 }
-            }
+            $match: { "quantityArray.v": { $gt: 0 } }
         },
         {
             $group: {
                 _id: "$quantityArray.k",
-                totalExpiredProducts: { $sum: 1 }
+                // Soma a quantidade de itens físicos por loja
+                totalExpiredProducts: { $sum: "$quantityArray.v" }
             }
         },
-        {
-            $sort: { totalExpiredProducts: -1 }
-        }
+        { $sort: { totalExpiredProducts: -1 } }
     ]);
 };
 

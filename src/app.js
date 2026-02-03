@@ -18,16 +18,12 @@ app.use((req, res, next) => {
     next();
 });
 
-// Rotas específicas primeiro
 app.use("/products", productRoutes);
 
-// Rota de checagem de saúde
-// Rota base para teste direto
 app.get("/", (req, res) => {
     res.json({ status: "API online", timestamp: new Date() });
 });
 
-// 4º: Middleware para capturar o que NINGUÉM tratou
 app.use((req, res) => {
     console.log(`[404 FINAL] O Express não encontrou nada para: ${req.path}`);
     res.status(404).json({ error: `Rota ${req.path} não encontrada.` });

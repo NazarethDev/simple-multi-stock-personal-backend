@@ -2,30 +2,30 @@ import { StatusCodes } from "http-status-codes";
 import { getExpiredProductsByStoreRepository, getExpiredCostByStoreRepository } from "../repositories/productStatistcsRepository.js";
 
 export async function expiredProductsByStoreService(months) {
-
-    const searchMonths = months ? Number(months) : 1
-
+    const parsedMonths = months ? Number(months) : 1;
     const allowedMonths = [1, 2, 3];
 
-    if (!allowedMonths.includes(Number(months))) {
+    if (!allowedMonths.includes(parsedMonths)) {
         const error = new Error("Invalid search period in months.");
         error.status = StatusCodes.BAD_REQUEST;
         throw error;
-    };
+    }
 
-    const stats = await getExpiredProductsByStoreRepository(Number(months));
+    const stats = await getExpiredProductsByStoreRepository(parsedMonths);
 
-    const totalLostedProducts = stats.reduce((acc, item) => acc + item.totalExpiredProducts, 0);
+    const byStore = {};
+    let totalLostedProducts = 0;
+
+    stats.forEach(item => {
+        byStore[item._id] = item.totalExpiredProducts;
+        totalLostedProducts += item.totalExpiredProducts;
+    });
 
     return {
         totalLosted: totalLostedProducts,
-        byStore: stats.map(item => ({
-            store: item._id,
-            totalExpiredProducts: item.totalExpiredProducts
-        }))
+        byStore: byStore 
     };
-
-};
+}
 
 export async function getExpiresCostsStatisticsService(months) {
     const parsedMonths = months ? Number(months) : 3
