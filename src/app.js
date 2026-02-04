@@ -1,4 +1,3 @@
-// src/app.js
 import express from "express";
 import cors from "cors";
 import productRoutes from "./routes/productRoutes.js";
@@ -11,6 +10,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 //connectDB();
+//use conectDB() para usar sua aplicação em ambiente local.
 
 app.use((req, res, next) => {
     console.log(`[DEBUG] Method: ${req.method} | URL: ${req.url} | Path: ${req.path}`);

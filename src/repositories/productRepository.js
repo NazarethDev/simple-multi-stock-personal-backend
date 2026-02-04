@@ -57,8 +57,8 @@ export async function findExpiredProducts({
 
     const query = {
         expiresAt: {
-            $lt: endDate, 
-            $gte: startDate 
+            $lt: endDate,
+            $gte: startDate
         }
     };
 
@@ -73,3 +73,11 @@ export async function findExpiredProducts({
 
     return { products, total };
 }
+
+export async function updateProductQuantityRepo(productId, quantities) {
+    return await Product.findByIdAndUpdate(
+        productId,
+        { $set: { quantity: quantities } },
+        { new: true, runValidators: true }
+    );
+};

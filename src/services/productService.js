@@ -2,7 +2,7 @@ import { STORE_KEYS } from "../models/storeMap.js";
 import Product from "../models/productSchema.js";
 import { StatusCodes } from "http-status-codes";
 import normalizeDate from "../utils/normalizeDate.js";
-import { findExpiringSoonProducts, findProductByEanCode, updateProductNameAndCostRepository, findExpiredProducts } from "../repositories/productRepository.js"
+import { findExpiringSoonProducts, findProductByEanCode, updateProductNameAndCostRepository, findExpiredProducts, updateProductQuantityRepo } from "../repositories/productRepository.js"
 
 
 function getInitialQuantity() {
@@ -18,7 +18,6 @@ async function findProduct(eanCode, expiresAt) {
         expiresAt
     });
 };
-
 
 export async function createProductService({ name, eanCode, expiresAt, cost }) {
 
@@ -50,7 +49,36 @@ export async function createProductService({ name, eanCode, expiresAt, cost }) {
     return product;
 };
 
+function validateQuantities(quantities) {
+    if (!quantities || typeof quantities !== "object") {
+        throw new Error("Dados de quantidades enviados inválidos");
+    }
+
+    for (const [store, quantity] of Object.entries(quantities)) {
+        if (!STORE_KEYS.includes(store)) {
+            throw new Error(`Loja inválida: ${store}`);
+        }
+        if (quantity < 0) {
+            throw new Error(`Quantidade inválida para ${store}`);
+        }
+    }
+}
+
 export async function updateProductQuantityService({ productId, quantities }) {
+    validateQuantities(quantities);
+
+    const updatedProduct = await updateProductQuantityRepo(productId, quantities);
+
+    if (!updatedProduct) {
+        const error = new Error("Produto não encontrado");
+        error.status = StatusCodes.NOT_FOUND;
+        throw error;
+    }
+
+    return updatedProduct;
+}
+
+{/*export async function updateProductQuantityService({ productId, quantities }) {
 
     if (!quantities || typeof quantities !== "object") {
         throw new Error("Dados de quantidades enviados inválidos");
@@ -86,7 +114,7 @@ export async function updateProductQuantityService({ productId, quantities }) {
     }
 
     return updatedProduct;
-}
+}*/}
 
 export async function updateProductCostAndNameService({ id, productName, productCost, expiresAt }) {
     if (productName === undefined && productCost === undefined && expiresAt === undefined) {
@@ -178,12 +206,9 @@ export async function findByProductEanCodeService(eanCode) {
 }
 
 export async function expiredProductsService({ page = 1, limit = 15, days = 30 }) {
-    // Define o limite superior como o início do dia de hoje (00:00:00)
-    // Assim, o operador $lt pegará tudo que venceu até 23:59:59 de ontem.
     const endDate = new Date();
     endDate.setUTCHours(0, 0, 0, 0);
 
-    // O startDate recua X dias a partir do início de hoje
     const startDate = new Date(endDate);
     startDate.setUTCDate(endDate.getUTCDate() - days);
 

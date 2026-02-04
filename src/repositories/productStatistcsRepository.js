@@ -23,7 +23,6 @@ export async function getExpiredProductsByStoreRepository(months) {
         {
             $group: {
                 _id: "$quantityArray.k",
-                // Soma a quantidade de itens físicos por loja
                 totalExpiredProducts: { $sum: "$quantityArray.v" }
             }
         },
