@@ -1,6 +1,6 @@
 # Multi Stock API
 
-Esta API alimenta o frontend **Multi Stock**, que pode ter seu repositório GitHub acessado através [deste link](https://github.com/NazarethDev/Simple-multi-stock-frontend), e com o site no ar com dados fictícios [neste link](https://simple-multi-stock-app-git-develop-nazarethdevs-projects.vercel.app/).
+Esta API alimenta o frontend **Multi Stock**, que pode ter seu repositório GitHub acessado através [deste link](https://github.com/NazarethDev/Simple-multi-stock-frontend), e com o site no ar com dados fictícios [neste link](https://simple-multi-stock-app.vercel.app/).
 
 O objetivo do projeto é tornar visível e acessível informações sobre uma mesma rede de lojas, permitindo o controle de disponibilidade de estoque e datas de vencimento de produtos entre locais geograficamente distintos.
 
