@@ -136,3 +136,12 @@ A API fornece insights sobre perdas e performance de estoque:
     }
     ```
 
+## 🛠️ Tecnologias Utilizadas
+
+
+| Tecnologia | Categoria        | Descrição                                                                 |
+|------------|------------------|---------------------------------------------------------------------------|
+| Node.js    | Runtime          | Ambiente de execução JavaScript no lado do servidor, baseado no V8.       |
+| Express.js | Framework Web    | Framework minimalista para criação de APIs REST e aplicações web.         |
+| Mongoose   | ODM              | Biblioteca para modelagem de dados e integração com MongoDB.              |
+| MongoDB   | Banco de Dados   | Banco de dados NoSQL orientado a documentos.     
