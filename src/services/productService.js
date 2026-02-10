@@ -78,44 +78,6 @@ export async function updateProductQuantityService({ productId, quantities }) {
     return updatedProduct;
 }
 
-{/*export async function updateProductQuantityService({ productId, quantities }) {
-
-    if (!quantities || typeof quantities !== "object") {
-        throw new Error("Dados de quantidades enviados inválidos");
-    }
-
-    for (const [store, quantity] of Object.entries(quantities)) {
-        if (!STORE_KEYS.includes(store)) {
-            throw new Error(`Loja inválida: ${store}`);
-        }
-
-        if (quantity < 0) {
-            throw new Error(`Quantidade inválida para ${store}`);
-        }
-    }
-
-    const updatedProduct = await Product.findByIdAndUpdate(
-        productId,
-        {
-            $set: {
-                quantity: quantities
-            }
-        },
-        {
-            new: true,
-            runValidators: true
-        }
-    );
-
-    if (!updatedProduct) {
-        const error = new Error("Produto não encontrado");
-        error.status = StatusCodes.NOT_FOUND;
-        throw error;
-    }
-
-    return updatedProduct;
-}*/}
-
 export async function updateProductCostAndNameService({ id, productName, productCost, expiresAt }) {
     if (productName === undefined && productCost === undefined && expiresAt === undefined) {
         const error = new Error("At least one field must be provided");
